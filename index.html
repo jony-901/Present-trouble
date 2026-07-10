@@ -1314,7 +1314,8 @@
         async function syncRentToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
-                showToastNotification("⚠️ আগে Settings-এ আপনার Apps Script URL সেভ করুন!", "warning");
+                showToastNotification("⚠️ আগে Settings-এ গিয়ে আপনার Apps Script URL সেভ করুন!", "warning");
+                toggleSettingsForm();
                 return;
             }
 
@@ -1357,15 +1358,13 @@
                     mode: 'no-cors', // Apps Script redirect CORS ইস্যু এড়াতে এটি সবচেয়ে ভালো পদ্ধতি
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain;charset=utf-8' // CORS প্রী-ফ্লাইট ঠেকাতে text/plain ব্যবহার করা হয়েছে
                     },
                     body: JSON.stringify(payload)
                 });
 
                 // no-cors মোডে সরাসরি রেসপন্স রিড করা যায় না, কিন্তু ডেটা সার্ভারে চলে যায়।
                 showToastNotification("🎉 ভাড়ার ডেটা গুগল শিটে পাঠানো হয়েছে! (Check your sheet)", "success");
-                // Auto close popup on success
-                setTimeout(closeSyncModal, 1500);
             } catch (error) {
                 console.error("Sync Error:", error);
                 showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা URL চেক করুন!", "error");
@@ -1379,7 +1378,8 @@
         async function syncMealsToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
-                showToastNotification("⚠️ আগে Settings-এ আপনার Apps Script URL সেভ করুন!", "warning");
+                showToastNotification("⚠️ আগে Settings-এ গিয়ে আপনার Apps Script URL সেভ করুন!", "warning");
+                toggleSettingsForm();
                 return;
             }
 
@@ -1437,14 +1437,12 @@
                     mode: 'no-cors',
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain;charset=utf-8' // CORS প্রী-ফ্লাইট ঠেকাতে text/plain ব্যবহার করা হয়েছে
                     },
                     body: JSON.stringify(payload)
                 });
 
                 showToastNotification("🎉 মিলের ডেটা গুগল শিটে পাঠানো হয়েছে! (Check your sheet)", "success");
-                // Auto close popup on success
-                setTimeout(closeSyncModal, 1500);
             } catch (error) {
                 console.error("Sync Error:", error);
                 showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা URL চেক করুন!", "error");
