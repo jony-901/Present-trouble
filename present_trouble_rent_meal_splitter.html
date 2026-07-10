@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Trouble - Rent & Meal Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+        /* Hide HTML5 input number spinners for a clean look */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-gradient-to-r from-rose-600 via-purple-700 to-indigo-800 text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-5 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+                    <i class="fa-solid fa-bolt text-2xl text-amber-300 animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Present Trouble ⚡</h1>
+                    <p class="text-xs text-rose-100">মেস লাইফের ঝামেলাহীন ভাড়ার ও মিলের হিসাব-নিকাশ</p>
+                </div>
+            </div>
+            <div class="bg-white/10 px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-400 animate-ping"></span>
+                ৪ ট্রাবলমেকার্স
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow space-y-8">
+        
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-slate-800 mb-1" id="banner-month-title">জুলাই ২০২৬ হিসাব (July 2026 Summary)</h2>
+                <p class="text-sm text-slate-500">বেস ভাড়া ও ইউটিলিটি সহ মোট হিসাব নিচে দেওয়া হলো। সরাসরি মোট বিল এডিট করতে ডানপাশের বক্সে টাইপ করুন।</p>
+            </div>
+            <!-- Interactive Editable Total Rent Display Card -->
+            <div class="bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-xl px-4 py-2.5 text-right w-full md:w-auto flex flex-col items-end shadow-sm group hover:border-emerald-300 transition duration-150">
+                <span class="text-[10px] font-bold block uppercase tracking-wider text-emerald-600 mb-1">Total Rent Bill (এখানে এডিট করুন)</span>
+                <div class="flex items-center gap-1 justify-end w-full">
+                    <i class="fa-solid fa-pen text-xs text-emerald-400 group-hover:text-emerald-600 transition duration-150 mr-1"></i>
+                    <input type="number" id="quick-total-input" value="10306" class="bg-transparent text-2xl font-extrabold text-emerald-800 text-right focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-lg px-2 py-0.5 w-32 border border-emerald-100 hover:border-emerald-200 transition duration-150" placeholder="0">
+                    <span class="text-2xl font-extrabold text-emerald-800">৳</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h3 class="text-md font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3 border-slate-100">
+                        <i class="fa-solid fa-calculator text-indigo-500"></i>
+                        ১. ভাড়ার বিবরণী (Rent Details)
+                    </h3>
+                    
+                    <!-- Month Selector (MASTER CONTROLLER) -->
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">মাস পরিবর্তন করুন (Select Month)</label>
+                        <select id="bill-month" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-extrabold text-indigo-900 shadow-sm cursor-pointer transition duration-150 hover:bg-indigo-50/50">
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June (জুন পূর্ববর্তী ডাটা)</option>
+                            <option value="July" selected>July (চলতি হিসাব)</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                        <p class="text-[11px] text-indigo-600 font-semibold mt-1.5"><i class="fa-solid fa-lightbulb"></i> June ও July এর মধ্যে পরিবর্তন করে আগের ও নতুন ডাটার তফাত দেখুন!</p>
+                    </div>
+
+                    <!-- Base Rent -->
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">বাসা ভাড়া (Base Rent)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">৳</div>
+                            <input type="number" id="base-rent" value="7500" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-slate-700" placeholder="0">
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">আপনাদের ফিক্সড ৪ জনের বাসা ভাড়া ৭৫০০ টাকা</p>
+                    </div>
+
+                    <!-- Utility and Extras -->
+                    <div class="mb-6">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">ইউটিলিটি ও অন্যান্য (Utilities & Others)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">৳</div>
+                            <input type="number" id="utility-bill" value="2806" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-slate-700" placeholder="0">
+                        </div>
+                        <p class="text-[11px] text-indigo-500 font-medium mt-1">ভাড়া ছাড়া বাকি সব অতিরিক্ত বিল এখানে দিন</p>
+                    </div>
+
+                    <!-- Wifi Bill Toggle Option -->
+                    <div class="mb-6 bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-xl">
+                                <i class="fa-solid fa-wifi text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-bold text-slate-700">ওয়াই-ফাই বিল (WiFi Bill)</span>
+                                <span class="text-[10px] text-slate-400 block">৳ ৫২৫ ফিক্সড (৪ জন সমভাগে)</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="add-wifi" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
+                    <!-- Bill summary list -->
+                    <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between text-xs text-slate-600">
+                            <span>Base Rent:</span>
+                            <span class="font-semibold text-slate-800" id="calc-base-display">৳ 7,500.00</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-600">
+                            <span>Utility Bill:</span>
+                            <span class="font-semibold text-slate-800" id="calc-utility-display">৳ 2,806.00</span>
+                        </div>
+                        <div id="calc-wifi-row" class="hidden justify-between text-xs text-slate-600">
+                            <span>WiFi Bill:</span>
+                            <span class="font-semibold text-indigo-600" id="calc-wifi-display">৳ 525.00</span>
+                        </div>
+                        <div class="border-t border-indigo-100 pt-2 flex justify-between text-sm font-bold text-indigo-900">
+                            <span>Total Bill Amount:</span>
+                            <span id="calc-total-display">৳ 10,306.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info panel for visual instructions -->
+                <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-5 text-amber-900">
+                    <h4 class="text-sm font-bold mb-1.5 flex items-center gap-2 text-amber-800">
+                        <i class="fa-solid fa-circle-info"></i>
+                        স্পেশাল অ্যাডজাস্টমেন্ট ও পেমেন্ট ফিচার
+                    </h4>
+                    <p class="text-xs leading-relaxed text-amber-800/90 mb-2">
+                        ১. মেম্বার যদি ইতিমধ্যে বিল বা ভাড়ার বাইরে কোনো টাকা খরচ করে থাকে, তবে তার নামের পাশে <strong>"Paid Bill"</strong> এ সেই টাকা লিখে দিন। ক্যালকুলেটর তা স্বয়ংক্রিয়ভাবে মাইনাস করে দেবে!
+                    </p>
+                    <p class="text-xs leading-relaxed text-amber-800/90">
+                        ২. কোনো মেম্বার যদি ম্যানেজারকে তার চূড়ান্ত ভাড়া পরিশোধ করে দেয়, তবে নিচে <strong>"Pay / পরিশোধ"</strong> বাটনটিতে ক্লিক করে তাকে পেইড মার্ক করুন।
+                    </p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-4 border-b pb-3 border-slate-100">
+                        <h3 class="text-md font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-users text-indigo-500"></i>
+                            ভাড়া ও ইউটিলিটি শেয়ার (Roommates Share)
+                        </h3>
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2 py-1 rounded">Equal Split (1/4)</span>
+                    </div>
+
+                    <!-- Roommate list container -->
+                    <div class="space-y-4" id="roommates-list">
+                        
+                        <!-- Roommate Card: JONY -->
+                        <div class="roommate-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 transition duration-200 hover:border-indigo-100" id="card-JONY">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm shadow-sm" id="avatar-JONY">
+                                        JN
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <h4 class="font-bold text-slate-800 text-sm">1. JONY</h4>
+                                            <span id="badge-JONY" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-md">✓ Paid</span>
+                                        </div>
+                                        <p class="text-xs text-slate-400">Equal split participant</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 justify-between sm:justify-end flex-grow sm:flex-grow-0">
+                                    <div class="text-left sm:text-right mr-2">
+                                        <span class="text-xs text-slate-400 block">Net Rent Payable</span>
+                                        <span class="font-extrabold text-indigo-700 text-base block" id="due-JONY">৳ 2,576.50</span>
+                                    </div>
+                                    <div class="w-20">
+                                        <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Paid Bill</label>
+                                        <input type="number" id="spent-JONY" value="0" class="spent-input w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                    </div>
+                                    <div class="pt-3.5">
+                                        <button onclick="toggleRentPaid('JONY')" id="btn-JONY" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-indigo-100">
+                                            <i class="fa-solid fa-money-bill-wave"></i> Pay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Roommate Card: RIFAT -->
+                        <div class="roommate-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 transition duration-200 hover:border-indigo-100" id="card-RIFAT">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm shadow-sm" id="avatar-RIFAT">
+                                        RF
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <h4 class="font-bold text-slate-800 text-sm">2. RIFAT</h4>
+                                            <span id="badge-RIFAT" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-md">✓ Paid</span>
+                                        </div>
+                                        <p class="text-xs text-slate-400">Equal split participant</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 justify-between sm:justify-end flex-grow sm:flex-grow-0">
+                                    <div class="text-left sm:text-right mr-2">
+                                        <span class="text-xs text-slate-400 block">Net Rent Payable</span>
+                                        <span class="font-extrabold text-indigo-700 text-base block" id="due-RIFAT">৳ 2,576.50</span>
+                                    </div>
+                                    <div class="w-20">
+                                        <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Paid Bill</label>
+                                        <input type="number" id="spent-RIFAT" value="0" class="spent-input w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                    </div>
+                                    <div class="pt-3.5">
+                                        <button onclick="toggleRentPaid('RIFAT')" id="btn-RIFAT" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-indigo-100">
+                                            <i class="fa-solid fa-money-bill-wave"></i> Pay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Roommate Card: MURAD -->
+                        <div class="roommate-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 transition duration-200 hover:border-indigo-100" id="card-MURAD">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm shadow-sm" id="avatar-MURAD">
+                                        MR
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <h4 class="font-bold text-slate-800 text-sm">3. MURAD</h4>
+                                            <span id="badge-MURAD" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-md">✓ Paid</span>
+                                        </div>
+                                        <p class="text-xs text-slate-400">Equal split participant</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 justify-between sm:justify-end flex-grow sm:flex-grow-0">
+                                    <div class="text-left sm:text-right mr-2">
+                                        <span class="text-xs text-slate-400 block">Net Rent Payable</span>
+                                        <span class="font-extrabold text-indigo-700 text-base block" id="due-MURAD">৳ 2,576.50</span>
+                                    </div>
+                                    <div class="w-20">
+                                        <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Paid Bill</label>
+                                        <input type="number" id="spent-MURAD" value="0" class="spent-input w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                    </div>
+                                    <div class="pt-3.5">
+                                        <button onclick="toggleRentPaid('MURAD')" id="btn-MURAD" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-indigo-100">
+                                            <i class="fa-solid fa-money-bill-wave"></i> Pay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Roommate Card: RAYHAN -->
+                        <div class="roommate-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 transition duration-200 hover:border-indigo-100" id="card-RAYHAN">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shadow-sm" id="avatar-RAYHAN">
+                                        RH
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <h4 class="font-bold text-slate-800 text-sm">4. RAYHAN</h4>
+                                            <span id="badge-RAYHAN" class="hidden text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-md">✓ Paid</span>
+                                        </div>
+                                        <p class="text-xs text-slate-400">Equal split participant</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 justify-between sm:justify-end flex-grow sm:flex-grow-0">
+                                    <div class="text-left sm:text-right mr-2">
+                                        <span class="text-xs text-slate-400 block">Net Rent Payable</span>
+                                        <span class="font-extrabold text-indigo-700 text-base block" id="due-RAYHAN">৳ 2,576.50</span>
+                                    </div>
+                                    <div class="w-20">
+                                        <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Paid Bill</label>
+                                        <input type="number" id="spent-RAYHAN" value="0" class="spent-input w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                    </div>
+                                    <div class="pt-3.5">
+                                        <button onclick="toggleRentPaid('RAYHAN')" id="btn-RAYHAN" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-indigo-100">
+                                            <i class="fa-solid fa-money-bill-wave"></i> Pay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Rent Summary copy card -->
+                <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl"></div>
+                    
+                    <h3 class="text-md font-bold mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-amber-400"></i>
+                            ভাড়া সামারি (Shareable Rent Summary)
+                        </span>
+                        <span class="text-[11px] bg-indigo-800/80 text-indigo-200 px-2 py-0.5 rounded uppercase font-bold tracking-wider" id="summary-month-badge">July 2026</span>
+                    </h3>
+
+                    <!-- Dynamic text display container -->
+                    <pre id="summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-indigo-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-indigo-900/30"></pre>
+
+                    <!-- Interaction Actions -->
+                    <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                        <button onclick="copyToClipboard('summary-text-box')" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold py-2.5 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 text-sm shadow-lg shadow-amber-500/10">
+                            <i class="fa-solid fa-copy"></i>
+                            Copy Rent Summary (ভাড়া কপি করুন)
+                        </button>
+                        <button onclick="resetCalculator()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold py-2.5 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            Reset Rent
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Meal Calculator (মিলের হিসাব) -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <div class="border-b pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-rose-100 text-rose-700 p-2.5 rounded-xl">
+                        <i class="fa-solid fa-bowl-food text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-800">২. মিলের হিসাব (Meal Calculator)</h2>
+                        <p class="text-xs text-slate-400">মেসের বাজার খরচ এবং সবার মোট মিলের নির্ভুল হিসাব</p>
+                    </div>
+                </div>
+                <div class="bg-rose-50 border border-rose-100 text-rose-800 px-4 py-2 rounded-xl flex items-center gap-2">
+                    <span class="text-xs font-semibold">আজকের মিল রেট:</span>
+                    <span class="font-black text-rose-600 text-lg" id="meal-rate-badge">৳ 0.00</span>
+                </div>
+            </div>
+
+            <!-- Meal Inputs Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Meal Controls Panel -->
+                <div class="lg:col-span-4 space-y-5">
+                    <div class="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl space-y-4">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">মিল প্যারামিটারস (Parameters)</h4>
+                        
+                        <!-- Total Bazaar Expense -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5">মোট বাজার খরচ (Total Cost)</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-xs">৳</div>
+                                <input type="number" id="meal-total-cost" value="6500" class="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-4 py-2 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="0">
+                            </div>
+                        </div>
+
+                        <!-- Total Meal Count -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5">মোট মিল সংখ্যা (Total Meals)</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-xs"><i class="fa-solid fa-utensils text-xs"></i></div>
+                                <input type="number" id="meal-total-count" value="120" class="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-4 py-2 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="0">
+                            </div>
+                        </div>
+
+                        <!-- Quick Same Meals Field -->
+                        <div class="border-t border-slate-200/60 pt-3">
+                            <label class="block text-xs font-bold text-indigo-600 uppercase mb-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-clone text-xs"></i> সবার মিল সমান হলে (Quick Equal Meals)
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="number" id="quick-same-meals" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="যেমন: ৩০">
+                                <button type="button" onclick="setSameMeals()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition duration-150 whitespace-nowrap flex items-center gap-1 shadow-sm">
+                                    <i class="fa-solid fa-check"></i> Apply (দিন)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Total Collected Deposit (মোট জমা) & Cash in Hand / Deficit display -->
+                        <div class="border-t border-slate-200/80 pt-4 mt-2 space-y-3">
+                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                                <div class="flex flex-col text-left">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">মোট সংগৃহীত জমা (Calculated)</span>
+                                    <span class="text-xs font-bold text-slate-700">Total Deposit</span>
+                                </div>
+                                <span class="text-sm font-black text-slate-800" id="total-collected-deposit-badge">৳ 0.00</span>
+                            </div>
+
+                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm" id="cash-balance-card">
+                                <div class="flex flex-col text-left">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase" id="cash-balance-title">অবशिष्ट ক্যাশ / ঘাটতি</span>
+                                    <span class="text-xs font-bold text-slate-700">Cash Balance</span>
+                                </div>
+                                <span class="text-sm font-black text-emerald-600" id="total-cash-balance-badge">৳ 0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Info/Hint -->
+                        <div class="p-3.5 bg-rose-50/50 border border-rose-100 rounded-xl text-[11px] text-rose-950 leading-relaxed space-y-1">
+                            <span class="font-bold block text-rose-800"><i class="fa-solid fa-chart-line mr-1"></i>হিসাবের নিয়ম:</span>
+                            <span>মেম্বারদের দেওয়া মোট জমা থেকে বাজার খরচ বাদ দিয়ে "অবशिष्ट ক্যাশ বা ঘাটতি" হিসাব করা হয়।</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roommate Meals Details Panel -->
+                <div class="lg:col-span-8 space-y-4">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">মেম্বারদের জমা ও মিল এন্ট্রি (Deposits & Meals)</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- JONY Meal Card -->
+                        <div class="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl hover:border-rose-200 transition duration-150">
+                            <div class="flex items-center space-x-2.5 mb-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">JN</div>
+                                <h5 class="font-bold text-sm text-slate-800">1. JONY</h5>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2.5 mb-2">
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">জমা (Deposit)</label>
+                                    <input type="number" id="meal-deposit-JONY" value="2000" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">মিল (Meals)</label>
+                                    <input type="number" id="meals-JONY" value="32" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                            </div>
+                            <div class="border-t border-dashed border-slate-200 pt-2 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">খরচ: <strong class="text-slate-700 font-semibold" id="meal-cost-JONY">৳ 0.00</strong></span>
+                                <span id="meal-status-JONY" class="font-bold px-2 py-0.5 rounded">পাবে ৳0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- RIFAT Meal Card -->
+                        <div class="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl hover:border-rose-200 transition duration-150">
+                            <div class="flex items-center space-x-2.5 mb-3">
+                                <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs">RF</div>
+                                <h5 class="font-bold text-sm text-slate-800">2. RIFAT</h5>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2.5 mb-2">
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">জমা (Deposit)</label>
+                                    <input type="number" id="meal-deposit-RIFAT" value="1500" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">মিল (Meals)</label>
+                                    <input type="number" id="meals-RIFAT" value="28" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                            </div>
+                            <div class="border-t border-dashed border-slate-200 pt-2 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">খরচ: <strong class="text-slate-700 font-semibold" id="meal-cost-RIFAT">৳ 0.00</strong></span>
+                                <span id="meal-status-RIFAT" class="font-bold px-2 py-0.5 rounded">পাবে ৳0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- MURAD Meal Card -->
+                        <div class="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl hover:border-rose-200 transition duration-150">
+                            <div class="flex items-center space-x-2.5 mb-3">
+                                <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">MR</div>
+                                <h5 class="font-bold text-sm text-slate-800">3. MURAD</h5>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2.5 mb-2">
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">জমা (Deposit)</label>
+                                    <input type="number" id="meal-deposit-MURAD" value="1200" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">মিল (Meals)</label>
+                                    <input type="number" id="meals-MURAD" value="30" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                            </div>
+                            <div class="border-t border-dashed border-slate-200 pt-2 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">খরচ: <strong class="text-slate-700 font-semibold" id="meal-cost-MURAD">৳ 0.00</strong></span>
+                                <span id="meal-status-MURAD" class="font-bold px-2 py-0.5 rounded">পাবে ৳0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- RAYHAN Meal Card -->
+                        <div class="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl hover:border-rose-200 transition duration-150">
+                            <div class="flex items-center space-x-2.5 mb-3">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">RH</div>
+                                <h5 class="font-bold text-sm text-slate-800">4. RAYHAN</h5>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2.5 mb-2">
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">জমা (Deposit)</label>
+                                    <input type="number" id="meal-deposit-RAYHAN" value="1800" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">মিল (Meals)</label>
+                                    <input type="number" id="meals-RAYHAN" value="30" class="meal-calc-input w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                                </div>
+                            </div>
+                            <div class="border-t border-dashed border-slate-200 pt-2 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">খরচ: <strong class="text-slate-700 font-semibold" id="meal-cost-RAYHAN">৳ 0.00</strong></span>
+                                <span id="meal-status-RAYHAN" class="font-bold px-2 py-0.5 rounded">পাবে ৳0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meal Share Summary Output -->
+            <div class="mt-8 bg-gradient-to-br from-rose-950 to-slate-900 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-rose-500/10 rounded-full blur-2xl"></div>
+                
+                <h3 class="text-md font-bold mb-4 flex items-center justify-between border-b border-rose-900/60 pb-3">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-utensils text-rose-400"></i>
+                        মিলের সামারি (Shareable Meal Summary)
+                    </span>
+                    <span class="text-[11px] bg-rose-800/80 text-rose-200 px-2 py-0.5 rounded uppercase font-bold tracking-wider" id="meal-summary-month-badge">July 2026</span>
+                </h3>
+
+                <!-- Dynamic text display container -->
+                <pre id="meal-summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-rose-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-rose-900/30"></pre>
+
+                <!-- Actions -->
+                <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                    <button onclick="copyToClipboard('meal-summary-text-box')" class="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold py-2.5 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 text-sm shadow-lg shadow-rose-500/10">
+                        <i class="fa-solid fa-copy"></i>
+                        Copy Meal Summary (মিলের হিসাব কপি করুন)
+                    </button>
+                    <button onclick="resetMealCalculator()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold py-2.5 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Reset Meals
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom toast alert system inside iframe -->
+    <div id="toast-message" class="hidden fixed top-4 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-5 py-3 rounded-xl shadow-lg transition-all duration-300 z-50 text-center min-w-[280px]">
+        <i class="fa-solid fa-circle-check mr-1.5"></i> Copied to Clipboard Successfully!
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p class="font-medium text-slate-500">Present Trouble Rent & Meal Calculator • Made with <i class="fa-solid fa-bolt text-amber-500"></i></p>
+            <p>Designed for Troublesome Roommates: JONY, RIFAT, MURAD & RAYHAN</p>
+        </div>
+    </footer>
+
+    <script>
+        // Roommates state definitions
+        const roommates = ["JONY", "RIFAT", "MURAD", "RAYHAN"];
+        
+        // Track payment state of each roommate's net payable due
+        const rentPaymentStatuses = {
+            JONY: false,
+            RIFAT: false,
+            MURAD: false,
+            RAYHAN: false
+        };
+
+        // Multi-Month Data Repository (জুন মাসের ডাটা ফিক্সড করে দেওয়া হয়েছে)
+        const dataStore = {
+            June: {
+                rent: {
+                    base: 7500,
+                    utility: 2000,
+                    wifi: false,
+                    spent: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
+                    paid: { JONY: false, RIFAT: false, MURAD: false, RAYHAN: false }
+                },
+                meals: {
+                    totalCost: 5220,
+                    totalCount: 148,
+                    deposits: { JONY: 1500, RIFAT: 1500, MURAD: 1000, RAYHAN: 1240 }, // মোট ডিপোজিট ৫২৪০ টাকা
+                    counts: { JONY: 46, RIFAT: 46, MURAD: 20, RAYHAN: 36 } // মোট মিল ১৪৮টি
+                }
+            },
+            July: {
+                rent: {
+                    base: 7500,
+                    utility: 2806,
+                    wifi: false,
+                    spent: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
+                    paid: { JONY: false, RIFAT: false, MURAD: false, RAYHAN: false }
+                },
+                meals: {
+                    totalCost: 6500,
+                    totalCount: 120,
+                    deposits: { JONY: 2000, RIFAT: 1500, MURAD: 1200, RAYHAN: 1800 },
+                    counts: { JONY: 32, RIFAT: 28, MURAD: 30, RAYHAN: 30 }
+                }
+            }
+        };
+
+        let currentActiveMonth = "July"; // Default loaded month
+
+        // DOM inputs binding for Rent
+        const baseRentInput = document.getElementById('base-rent');
+        const utilityBillInput = document.getElementById('utility-bill');
+        const billMonthSelect = document.getElementById('bill-month');
+        const addWifiCheckbox = document.getElementById('add-wifi');
+        const calcWifiRow = document.getElementById('calc-wifi-row');
+        const calcWifiDisplay = document.getElementById('calc-wifi-display');
+        const quickTotalInput = document.getElementById('quick-total-input');
+        
+        // Output visual displays binding for Rent
+        const calcBaseDisplay = document.getElementById('calc-base-display');
+        const calcUtilityDisplay = document.getElementById('calc-utility-display');
+        const calcTotalDisplay = document.getElementById('calc-total-display');
+        const summaryMonthBadge = document.getElementById('summary-month-badge');
+        const summaryTextBox = document.getElementById('summary-text-box');
+        const toastMessage = document.getElementById('toast-message');
+        const bannerMonthTitle = document.getElementById('banner-month-title');
+
+        // DOM inputs binding for Meals
+        const mealTotalCostInput = document.getElementById('meal-total-cost');
+        const mealTotalCountInput = document.getElementById('meal-total-count');
+        const mealRateBadge = document.getElementById('meal-rate-badge');
+        const mealSummaryMonthBadge = document.getElementById('meal-summary-month-badge');
+        const mealSummaryTextBox = document.getElementById('meal-summary-text-box');
+        
+        // New DOM elements for total deposit and balance tracking
+        const totalCollectedDepositBadge = document.getElementById('total-collected-deposit-badge');
+        const totalCashBalanceBadge = document.getElementById('total-cash-balance-badge');
+        const cashBalanceCard = document.getElementById('cash-balance-card');
+        const cashBalanceTitle = document.getElementById('cash-balance-title');
+
+        window.onload = function() {
+            loadMonthState(currentActiveMonth);
+            setupEventListeners();
+        };
+
+        // Dynamic state initialization helper
+        function getMonthData(month) {
+            if (!dataStore[month]) {
+                dataStore[month] = {
+                    rent: {
+                        base: 7500,
+                        utility: 0,
+                        wifi: false,
+                        spent: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
+                        paid: { JONY: false, RIFAT: false, MURAD: false, RAYHAN: false }
+                    },
+                    meals: {
+                        totalCost: 0,
+                        totalCount: 0,
+                        deposits: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
+                        counts: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 }
+                    }
+                };
+            }
+            return dataStore[month];
+        }
+
+        // Save current screen state to memory
+        function saveCurrentMonthState(month) {
+            if (!dataStore[month]) return;
+            dataStore[month].rent.base = parseFloat(baseRentInput.value) || 0;
+            dataStore[month].rent.utility = parseFloat(utilityBillInput.value) || 0;
+            dataStore[month].rent.wifi = addWifiCheckbox.checked;
+            
+            roommates.forEach(name => {
+                dataStore[month].rent.spent[name] = parseFloat(document.getElementById(`spent-${name}`).value) || 0;
+                dataStore[month].rent.paid[name] = rentPaymentStatuses[name];
+                
+                dataStore[month].meals.deposits[name] = parseFloat(document.getElementById(`meal-deposit-${name}`).value) || 0;
+                dataStore[month].meals.counts[name] = parseFloat(document.getElementById(`meals-${name}`).value) || 0;
+            });
+
+            dataStore[month].meals.totalCost = parseFloat(mealTotalCostInput.value) || 0;
+            dataStore[month].meals.totalCount = parseFloat(mealTotalCountInput.value) || 0;
+        }
+
+        // Load specific state from memory to screen inputs
+        function loadMonthState(month) {
+            const data = getMonthData(month);
+            
+            baseRentInput.value = data.rent.base;
+            utilityBillInput.value = data.rent.utility;
+            addWifiCheckbox.checked = data.rent.wifi;
+            
+            roommates.forEach(name => {
+                document.getElementById(`spent-${name}`).value = data.rent.spent[name];
+                rentPaymentStatuses[name] = data.rent.paid[name];
+                
+                document.getElementById(`meal-deposit-${name}`).value = data.meals.deposits[name];
+                document.getElementById(`meals-${name}`).value = data.meals.counts[name];
+            });
+
+            mealTotalCostInput.value = data.meals.totalCost;
+            mealTotalCountInput.value = data.meals.totalCount;
+
+            summaryMonthBadge.textContent = `${month} 2026`;
+            mealSummaryMonthBadge.textContent = `${month} 2026`;
+            
+            calculateRentSplit(true);
+            calculateMealSplit();
+        }
+
+        // Event listener hooks mapping
+        function setupEventListeners() {
+            // Rent Update Triggers
+            baseRentInput.addEventListener('input', () => calculateRentSplit(true));
+            utilityBillInput.addEventListener('input', () => calculateRentSplit(true));
+            
+            // Month Dropdown Trigger
+            billMonthSelect.addEventListener('change', () => {
+                // Save old first
+                saveCurrentMonthState(currentActiveMonth);
+                
+                // Set new
+                currentActiveMonth = billMonthSelect.value;
+                
+                // Load new
+                loadMonthState(currentActiveMonth);
+                showToastNotification(`📅 ${currentActiveMonth} ২০২৬ এর ডাটা সফলভাবে লোড হয়েছে!`, "info");
+            });
+
+            addWifiCheckbox.addEventListener('change', () => calculateRentSplit(true));
+            quickTotalInput.addEventListener('input', () => calculateRentSplit(false));
+
+            roommates.forEach(name => {
+                const spentInput = document.getElementById(`spent-${name}`);
+                if (spentInput) {
+                    spentInput.addEventListener('input', () => calculateRentSplit(true));
+                }
+            });
+
+            // Meal Update Triggers
+            mealTotalCostInput.addEventListener('input', calculateMealSplit);
+            mealTotalCountInput.addEventListener('input', calculateMealSplit);
+
+            roommates.forEach(name => {
+                const depInput = document.getElementById(`meal-deposit-${name}`);
+                const mealInput = document.getElementById(`meals-${name}`);
+                if (depInput) depInput.addEventListener('input', calculateMealSplit);
+                if (mealInput) mealInput.addEventListener('input', calculateMealSplit);
+            });
+        }
+
+        // Function to toggle a roommate's rent as paid/unpaid
+        function toggleRentPaid(name) {
+            rentPaymentStatuses[name] = !rentPaymentStatuses[name];
+            
+            // Calculate current roommate's due to show in message
+            const baseRent = parseFloat(baseRentInput.value) || 0;
+            const wifiBill = addWifiCheckbox.checked ? 525 : 0;
+            const totalRent = parseFloat(quickTotalInput.value) || (baseRent + (parseFloat(utilityBillInput.value) || 0) + wifiBill);
+            const rawSharePerPerson = totalRent / roommates.length;
+            const spent = parseFloat(document.getElementById(`spent-${name}`).value) || 0;
+            const netDue = rawSharePerPerson - spent;
+
+            if (rentPaymentStatuses[name]) {
+                const displayDue = netDue > 0 ? `৳ ${netDue.toFixed(2)}` : 'rent';
+                showToastNotification(`🎉 Rent Cleared! Thank you, ${name}! (${displayDue} Received) ❤️`, "success");
+            } else {
+                showToastNotification(`↩️ Payment status reset for ${name}.`, "info");
+            }
+            
+            calculateRentSplit(true);
+        }
+
+        function calculateRentSplit(updateTotalFromBreakdown = true) {
+            const baseRent = parseFloat(baseRentInput.value) || 0;
+            const wifiBill = addWifiCheckbox.checked ? 525 : 0;
+            const currentMonth = billMonthSelect.value;
+            
+            let totalBill = 0;
+            let utilityBill = parseFloat(utilityBillInput.value) || 0;
+
+            if (updateTotalFromBreakdown) {
+                totalBill = baseRent + utilityBill + wifiBill;
+                quickTotalInput.value = totalBill;
+            } else {
+                totalBill = parseFloat(quickTotalInput.value) || 0;
+                utilityBill = totalBill - baseRent - wifiBill;
+                utilityBillInput.value = utilityBill >= 0 ? utilityBill : 0;
+            }
+
+            bannerMonthTitle.textContent = `${currentMonth} ২০২৬ হিসাব (${currentMonth} 2026 Summary)`;
+            calcBaseDisplay.textContent = `৳ ${baseRent.toLocaleString()}`;
+            calcUtilityDisplay.textContent = `৳ ${utilityBill.toLocaleString()}`;
+            
+            if (calcWifiDisplay) {
+                calcWifiDisplay.textContent = `৳ ${wifiBill.toFixed(2)}`;
+            }
+            
+            if (addWifiCheckbox.checked) {
+                calcWifiRow.classList.remove('hidden');
+                calcWifiRow.classList.add('flex');
+            } else {
+                calcWifiRow.classList.remove('flex');
+                calcWifiRow.classList.add('hidden');
+            }
+
+            calcTotalDisplay.textContent = `৳ ${totalBill.toLocaleString()}`;
+            summaryMonthBadge.textContent = `${currentMonth} 2026`;
+
+            const count = roommates.length;
+            const rawSharePerPerson = totalBill / count;
+
+            const spentPayments = {};
+            roommates.forEach(name => {
+                spentPayments[name] = parseFloat(document.getElementById(`spent-${name}`).value) || 0;
+            });
+
+            const allPaid = roommates.every(name => rentPaymentStatuses[name] === true);
+
+            const bannerSubtitle = document.querySelector('p.text-sm.text-slate-500');
+            if (bannerSubtitle) {
+                if (allPaid) {
+                    bannerSubtitle.className = "text-sm text-emerald-600 font-bold animate-bounce mt-1";
+                    bannerSubtitle.innerHTML = `🎉 অসাধারণ! মেসের সবার ভাড়া পরিশোধ সম্পন্ন হয়েছে। সবাইকে অনেক ধন্যবাদ! ❤️`;
+                } else {
+                    bannerSubtitle.className = "text-sm text-slate-500";
+                    bannerSubtitle.textContent = "বেস ভাড়া ও ইউটিলিটি সহ মোট হিসাব নিচে দেওয়া হলো। সরাসরি মোট বিল এডিট করতে ডানপাশের বক্সে টাইপ করুন।";
+                }
+            }
+
+            const roommateCalculatedDues = {};
+            roommates.forEach(name => {
+                const share = rawSharePerPerson;
+                const paid = spentPayments[name];
+                const netDue = share - paid;
+                roommateCalculatedDues[name] = netDue;
+
+                const cardElement = document.getElementById(`card-${name}`);
+                const dueDisplayElement = document.getElementById(`due-${name}`);
+                const badgeElement = document.getElementById(`badge-${name}`);
+                const btnElement = document.getElementById(`btn-${name}`);
+                const subtitleElement = cardElement.querySelector('p.text-xs');
+
+                if (dueDisplayElement) {
+                    if (netDue < 0) {
+                        dueDisplayElement.className = "font-extrabold text-emerald-600 text-base block";
+                        dueDisplayElement.textContent = `৳ ${Math.abs(netDue).toFixed(2)} (Refund)`;
+                    } else if (netDue === 0) {
+                        dueDisplayElement.className = "font-extrabold text-slate-500 text-base block";
+                        dueDisplayElement.textContent = `৳ 0.00`;
+                    } else {
+                        dueDisplayElement.className = "font-extrabold text-indigo-700 text-base block";
+                        dueDisplayElement.textContent = `৳ ${netDue.toFixed(2)}`;
+                    }
+
+                    if (rentPaymentStatuses[name]) {
+                        dueDisplayElement.classList.add('line-through', 'opacity-50');
+                    } else {
+                        dueDisplayElement.classList.remove('line-through', 'opacity-50');
+                    }
+                }
+
+                if (rentPaymentStatuses[name]) {
+                    cardElement.className = "roommate-card p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 transition duration-200";
+                    badgeElement.classList.remove('hidden');
+                    btnElement.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-emerald-600 shadow-sm";
+                    btnElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> Paid`;
+                    if (subtitleElement) {
+                        subtitleElement.className = "text-xs text-emerald-600 font-bold animate-pulse";
+                        subtitleElement.innerHTML = `<i class="fa-solid fa-heart mr-1"></i> Thank you! (ধন্যবাদ)`;
+                    }
+                } else {
+                    cardElement.className = "roommate-card p-4 rounded-xl border border-slate-100 bg-slate-50/50 transition duration-200 hover:border-indigo-100";
+                    badgeElement.classList.add('hidden');
+                    btnElement.className = "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1.5 px-3 rounded-lg text-xs transition duration-150 flex items-center gap-1 border border-indigo-100";
+                    btnElement.innerHTML = `<i class="fa-solid fa-money-bill-wave"></i> Pay`;
+                    if (subtitleElement) {
+                        subtitleElement.className = "text-xs text-slate-400";
+                        subtitleElement.textContent = "Equal split participant";
+                    }
+                }
+            });
+
+            if (allPaid && !window.allPaidCelebrated) {
+                showToastNotification("🎉 Hooray! All roommates have cleared their dues! 🥳✨", "success");
+                window.allPaidCelebrated = true;
+            } else if (!allPaid) {
+                window.allPaidCelebrated = false;
+            }
+
+            generateTextSummary(currentMonth, baseRent, utilityBill, wifiBill, totalBill, rawSharePerPerson, spentPayments, roommateCalculatedDues, allPaid);
+        }
+
+        function calculateMealSplit() {
+            const totalCost = parseFloat(mealTotalCostInput.value) || 0;
+            const totalMeals = parseFloat(mealTotalCountInput.value) || 0;
+            const currentMonth = billMonthSelect.value;
+            
+            // Calc Meal Rate
+            const mealRate = totalMeals > 0 ? (totalCost / totalMeals) : 0;
+            mealRateBadge.textContent = `৳ ${mealRate.toFixed(2)}`;
+
+            const mealData = {};
+            let totalDepositCollected = 0;
+
+            roommates.forEach(name => {
+                const deposit = parseFloat(document.getElementById(`meal-deposit-${name}`).value) || 0;
+                const mealCount = parseFloat(document.getElementById(`meals-${name}`).value) || 0;
+                
+                totalDepositCollected += deposit;
+                
+                // Actual cost for this roommate
+                const cost = mealCount * mealRate;
+                // Balance = deposit - cost
+                const balance = deposit - cost;
+
+                mealData[name] = {
+                    deposit: deposit,
+                    meals: mealCount,
+                    cost: cost,
+                    balance: balance
+                };
+
+                // Update UI for each roommate
+                const costDisplay = document.getElementById(`meal-cost-${name}`);
+                const statusDisplay = document.getElementById(`meal-status-${name}`);
+
+                if (costDisplay) {
+                    costDisplay.textContent = `৳ ${cost.toFixed(2)}`;
+                }
+
+                if (statusDisplay) {
+                    if (balance > 0) {
+                        statusDisplay.className = "font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs";
+                        statusDisplay.textContent = `পাবে ৳ ${balance.toFixed(2)}`;
+                    } else if (balance < 0) {
+                        statusDisplay.className = "font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 text-xs";
+                        statusDisplay.textContent = `দেবে ৳ ${Math.abs(balance).toFixed(2)}`;
+                    } else {
+                        statusDisplay.className = "font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs";
+                        statusDisplay.textContent = `ক্লিয়ার`;
+                    }
+                }
+            });
+
+            // Update Total Collected Deposit Indicator
+            totalCollectedDepositBadge.textContent = `৳ ${totalDepositCollected.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            // Calculate remaining Cash Balance (Total Deposits - Total Cost)
+            const cashBalance = totalDepositCollected - totalCost;
+            totalCashBalanceBadge.textContent = `৳ ${Math.abs(cashBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            if (cashBalance > 0) {
+                // Surplus cash with Manager
+                cashBalanceCard.className = "flex justify-between items-center bg-emerald-50/50 p-3 rounded-xl border border-emerald-200 shadow-sm";
+                cashBalanceTitle.innerHTML = "অবशिष्ट ক্যাশ (Surplus) <span class='text-emerald-600 font-bold'>🟢</span>";
+                totalCashBalanceBadge.className = "text-sm font-black text-emerald-600";
+            } else if (cashBalance < 0) {
+                // Cash shortage (Manager is short on funds)
+                cashBalanceCard.className = "flex justify-between items-center bg-rose-50/50 p-3 rounded-xl border border-rose-200 shadow-sm";
+                cashBalanceTitle.innerHTML = "ঘাটতি ক্যাশ (Shortage) <span class='text-rose-600 font-bold'>🔴</span>";
+                totalCashBalanceBadge.className = "text-sm font-black text-rose-600";
+            } else {
+                // Perfect zero balance
+                cashBalanceCard.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm";
+                cashBalanceTitle.innerHTML = "ব্যালেন্স ক্লিয়ার (Zero Balance) ⚪";
+                totalCashBalanceBadge.className = "text-sm font-black text-slate-600";
+            }
+
+            // Re-render Meal Receipt Textbox Block
+            generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance);
+        }
+
+        function generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance) {
+            let summary = `🍲 PRESENT TROUBLE MEAL SUMMARY 🍲\n`;
+            summary += `📅 Month: ${currentMonth} 2026\n`;
+            summary += `====================================\n`;
+            summary += `💵 Total Deposits    : ৳ ${totalDepositCollected.toLocaleString(undefined, {minimumFractionDigits: 2})}\n`;
+            summary += `💰 Total Bazaar Cost : ৳ ${totalCost.toLocaleString(undefined, {minimumFractionDigits: 2})}\n`;
+            
+            if (cashBalance > 0) {
+                summary += `🟢 Remaining Cash   : ৳ ${cashBalance.toFixed(2)} (ম্যানেজারের হাতে জমা)\n`;
+            } else if (cashBalance < 0) {
+                summary += `🔴 Shortage Amount   : ৳ ${Math.abs(cashBalance).toFixed(2)} (ম্যানেজারকে মেম্বারদের দিতে হবে)\n`;
+            } else {
+                summary += `⚪ Cash Status       : All Balanced (৳ 0.00)\n`;
+            }
+
+            summary += `------------------------------------\n`;
+            summary += `🍽️ Total Meals Count: ${totalMeals} meals\n`;
+            summary += `⭐ Calculated Meal Rate : ৳ ${mealRate.toFixed(4)} / meal\n`;
+            summary += `------------------------------------\n`;
+            summary += `👉 ROOMMATES MEALS BREAKDOWN:\n\n`;
+
+            roommates.forEach((name, index) => {
+                const data = mealData[name];
+                summary += `${index + 1}. ${name}:\n`;
+                summary += `   • Deposit (জমা): ৳ ${data.deposit.toFixed(2)}\n`;
+                summary += `   • Meals Count : ${data.meals} meals\n`;
+                summary += `   • Meal Cost   : ৳ ${data.cost.toFixed(2)}\n`;
+                
+                if (data.balance > 0) {
+                    summary += `   • Status      : 🟢 পাবে (Refund) ৳ ${data.balance.toFixed(2)}\n`;
+                } else if (data.balance < 0) {
+                    summary += `   • Status      : 🔴 দেবে (Due/Add) ৳ ${Math.abs(data.balance).toFixed(2)}\n`;
+                } else {
+                    summary += `   • Status      : ⚪ All Clear (ক্লিয়ার)\n`;
+                }
+                summary += `\n`;
+            });
+
+            summary += `====================================\n`;
+            summary += `💡 অনুগ্রহ করে মিলের হিসাব মিলিয়ে দ্রুত লেনদেন সম্পন্ন করুন। ধন্যবাদ! 🙏`;
+
+            mealSummaryTextBox.textContent = summary;
+        }
+
+        function generateTextSummary(currentMonth, baseRent, utilityBill, wifiBill, totalBill, rawSharePerPerson, spentPayments, roommateCalculatedDues, allPaid = false) {
+            let summary = `⚡ PRESENT TROUBLE RENT SUMMARY ⚡\n`;
+            summary += `📅 Month: ${currentMonth} 2026\n`;
+            summary += `====================================\n`;
+            summary += `🏠 Base Rent     : ৳ ${baseRent.toLocaleString()}\n`;
+            summary += `🔌 Utilities/Ext : ৳ ${utilityBill.toLocaleString()}\n`;
+            summary += `🌐 WiFi Bill     : ৳ ${wifiBill} ${wifiBill > 0 ? '(With WiFi 🟢)' : '(Without WiFi ⚪)'}\n`;
+            summary += `------------------------------------\n`;
+            summary += `💰 Total Bill    : ৳ ${totalBill.toLocaleString()}\n`;
+            summary += `👥 Equal Share (1/4): ৳ ${rawSharePerPerson.toFixed(2)} per head\n`;
+            summary += `====================================\n\n`;
+            summary += `👉 ROOMMATES BREAKDOWN:\n\n`;
+
+            roommates.forEach((name, index) => {
+                const paid = spentPayments[name] || 0;
+                const netDue = roommateCalculatedDues[name];
+                const isPaid = rentPaymentStatuses[name];
+                
+                summary += `${index + 1}. ${name}:\n`;
+                summary += `   • Base Share: ৳ ${rawSharePerPerson.toFixed(2)}\n`;
+                if (paid > 0) {
+                    summary += `   • Paid Bill (Already): ৳ ${paid.toFixed(2)} (Adjusted)\n`;
+                }
+                
+                if (isPaid) {
+                    summary += `   • Status: 🟢 RENT PAID (৳ ${netDue > 0 ? netDue.toFixed(2) : '0.00'} Cleared) - Thank You! ❤️\n`;
+                } else {
+                    if (netDue < 0) {
+                        summary += `   • Status: Refund ৳ ${Math.abs(netDue).toFixed(2)} 🟢\n`;
+                    } else if (netDue === 0) {
+                        summary += `   • Status: All Clear ⚪\n`;
+                    } else {
+                        summary += `   • Net Payable: ৳ ${netDue.toFixed(2)} 🔴 (Unpaid)\n`;
+                    }
+                }
+                summary += `\n`;
+            });
+
+            summary += `====================================\n`;
+            if (allPaid) {
+                summary += `🎉 ALL DUES CLEARED! THANK YOU EVERYONE FOR YOUR PAYMENTS! 🥳❤️✨\n`;
+                summary += `মেসের সবার পেমেন্ট কমপ্লিট! সবাইকে ধন্যবাদ! 🙏`;
+            } else {
+                summary += `⚡ Please clear your dues as soon as possible. `;
+            }
+
+            summaryTextBox.textContent = summary;
+        }
+
+        // Copy text to clipboard logic targeting specified textbox ID
+        function copyToClipboard(elementId) {
+            const target = document.getElementById(elementId);
+            if (!target) return;
+            const textToCopy = target.textContent;
+
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
+            tempTextArea.style.position = "fixed";
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToastNotification("📋 Copied to Clipboard Successfully! ⚡", "success");
+                } else {
+                    showToastNotification("⚠️ Copying failed. Please select & copy manually.", "error");
+                }
+            } catch (err) {
+                showToastNotification("⚠️ Error copying summary. Please copy manually.", "error");
+            }
+            
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Reset rent calculator
+        function resetCalculator() {
+            baseRentInput.value = 7500;
+            utilityBillInput.value = 2806;
+            addWifiCheckbox.checked = false;
+
+            roommates.forEach(name => {
+                const spentInput = document.getElementById(`spent-${name}`);
+                if (spentInput) spentInput.value = 0;
+                rentPaymentStatuses[name] = false;
+            });
+
+            calculateRentSplit(true);
+            showToastNotification("🔄 Rent Calculator reset to defaults!", "info");
+        }
+
+        // Reset meal calculator
+        function resetMealCalculator() {
+            mealTotalCostInput.value = 6500;
+            mealTotalCountInput.value = 120;
+            
+            const quickSameMeals = document.getElementById('quick-same-meals');
+            if (quickSameMeals) quickSameMeals.value = '';
+
+            const defaultDeposits = { JONY: 2000, RIFAT: 1500, MURAD: 1200, RAYHAN: 1800 };
+            const defaultMeals = { JONY: 32, RIFAT: 28, MURAD: 30, RAYHAN: 30 };
+
+            roommates.forEach(name => {
+                document.getElementById(`meal-deposit-${name}`).value = defaultDeposits[name];
+                document.getElementById(`meals-${name}`).value = defaultMeals[name];
+            });
+
+            calculateMealSplit();
+            showToastNotification("🔄 Meal calculations reset to defaults!", "info");
+        }
+
+        // Set same meal count to all roommates at once and auto update total count
+        function setSameMeals() {
+            const quickInput = document.getElementById('quick-same-meals');
+            const count = parseFloat(quickInput.value);
+            
+            if (isNaN(count) || count < 0) {
+                showToastNotification("⚠️ সঠিক মিল সংখ্যা লিখুন!", "error");
+                return;
+            }
+
+            // Apply meal count to all roommate meal inputs
+            roommates.forEach(name => {
+                const input = document.getElementById(`meals-${name}`);
+                if (input) {
+                    input.value = count;
+                }
+            });
+
+            // Auto calculate total meals count based on equal input (count * 4)
+            const totalCountInput = document.getElementById('meal-total-count');
+            if (totalCountInput) {
+                totalCountInput.value = count * roommates.length;
+            }
+
+            // Recalculate everything
+            calculateMealSplit();
+            showToastNotification(`⚡ সবার মিল সংখ্যা ${count} এবং মোট মিল ${count * roommates.length} করা হয়েছে!`, "success");
+        }
+
+        // Custom notifications toast loader
+        function showToastNotification(message, type) {
+            toastMessage.textContent = message;
+            toastMessage.classList.remove('hidden', 'bg-emerald-500', 'bg-rose-500', 'bg-indigo-600');
+            
+            if (type === "success") {
+                toastMessage.classList.add('bg-emerald-500');
+            } else if (type === "error") {
+                toastMessage.classList.add('bg-rose-500');
+            } else {
+                toastMessage.classList.add('bg-indigo-600');
+            }
+
+            toastMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toastMessage.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
