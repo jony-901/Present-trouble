@@ -426,9 +426,9 @@
                         </div>
 
                         <!-- Info/Hint -->
-                        <div class="p-3.5 bg-rose-50/50 border border-rose-100 rounded-xl text-[11px] text-rose-950 leading-relaxed space-y-1">
-                            <span class="font-bold block text-rose-800"><i class="fa-solid fa-chart-line mr-1"></i>হিসাবের নিয়ম:</span>
-                            <span>মেম্বারদের দেওয়া মোট জমা থেকে বাজার খরচ বাদ দিয়ে "অবशिष्ट ক্যাশ বা ঘাটতি" হিসাব করা হয়।</span>
+                        <div class="p-3.5 bg-rose-50/50 border border-rose-100 rounded-xl text-[11px] text-rose-950 leading-relaxed space-y-1 font-sans">
+                            <span class="font-bold block text-rose-800"><i class="fa-solid fa-circle-info mr-1"></i>হিসাবের নিয়ম:</span>
+                            <span>মেম্বারদের দেওয়া মোট জমা থেকে মোট বাজার খরচ বাদ দিয়ে "অবশিষ্ট ক্যাশ / ঘাটতি" হিসাব করা হয়।</span>
                         </div>
                     </div>
                 </div>
@@ -617,10 +617,6 @@
         <div class="max-w-4xl mx-auto px-4 space-y-2">
             <p class="font-medium text-slate-500 transition duration-150 group-hover:text-indigo-600">Present Trouble Rent & Meal Calculator • Made with <i class="fa-solid fa-bolt text-amber-500"></i></p>
             <p>Designed for Troublesome Roommates: JONY, RIFAT, MURAD & RAYHAN</p>
-            <p class="text-[10px] text-slate-300 transition duration-150 group-hover:text-indigo-400 font-bold mt-1.5 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-fingerprint animate-pulse text-xs text-indigo-400"></i> 
-                <span>গোপন সিঙ্ক ড্যাশবোর্ডের জন্য এখানে ২ বার ট্যাপ/ডাবল ক্লিক করুন</span>
-            </p>
         </div>
     </footer>
 
@@ -710,47 +706,45 @@
                 document.getElementById('sheets-web-url').value = savedUrl;
             }
 
+            // Load saved monthly dataStore from browser local storage if exists
+            const savedDataStore = localStorage.getItem("present_trouble_datastore");
+            if (savedDataStore) {
+                try {
+                    const parsedData = JSON.parse(savedDataStore);
+                    // Merge saved database with memory database
+                    Object.assign(dataStore, parsedData);
+                } catch (e) {
+                    console.error("Error loading saved dataStore:", e);
+                }
+            }
+
             loadMonthState(currentActiveMonth);
             setupEventListeners();
-            setupFooterDoubleTap();
         };
-
-        // Footer double tap tracker logic for all devices (Mobile Touch & Desktop double-click)
-        function setupFooterDoubleTap() {
-            const footer = document.getElementById('app-footer');
-            let lastTap = 0;
-
-            // Touch events for Mobile/Tablet
-            footer.addEventListener('touchstart', function(e) {
-                const currentTime = new Date().getTime();
-                const tapLength = currentTime - lastTap;
-                if (tapLength < 300 && tapLength > 0) {
-                    openSyncModal();
-                    e.preventDefault(); // Prevent accidental zoom on mobile
-                }
-                lastTap = currentTime;
-            });
-
-            // Double Click event for Desktops
-            footer.addEventListener('dblclick', function(e) {
-                openSyncModal();
-            });
-        }
 
         // Modal triggers
         function openSyncModal() {
             const overlay = document.getElementById('sync-modal-overlay');
             const content = document.getElementById('sync-modal-content');
-            overlay.classList.add('modal-active');
-            content.classList.add('modal-content-active');
-            showToastNotification("📶 গুগল শিট সিঙ্ক ড্যাশবোর্ড ওপেন হয়েছে!", "info");
+            if (overlay && content) {
+                overlay.classList.add('modal-active');
+                content.classList.add('modal-content-active');
+            }
         }
 
         function closeSyncModal() {
             const overlay = document.getElementById('sync-modal-overlay');
             const content = document.getElementById('sync-modal-content');
-            overlay.classList.remove('modal-active');
-            content.classList.remove('modal-content-active');
+            if (overlay && content) {
+                overlay.classList.remove('modal-active');
+                content.classList.remove('modal-content-active');
+            }
+        }
+
+        // Persist the entire dataStore to browser localStorage for offline persistence
+        function persistToLocalStorage() {
+            saveCurrentMonthState(currentActiveMonth);
+            localStorage.setItem("present_trouble_datastore", JSON.stringify(dataStore));
         }
 
         // Dynamic state initialization helper
@@ -830,6 +824,7 @@
             billMonthSelect.addEventListener('change', () => {
                 // Save old first
                 saveCurrentMonthState(currentActiveMonth);
+                persistToLocalStorage(); // Persist right before switching months
                 
                 // Set new
                 currentActiveMonth = billMonthSelect.value;
@@ -859,6 +854,27 @@
                 if (depInput) depInput.addEventListener('input', calculateMealSplit);
                 if (mealInput) mealInput.addEventListener('input', calculateMealSplit);
             });
+
+            // Double Click & Tap Event Listeners for secret sync panel triggering on Footer
+            const footer = document.getElementById('app-footer');
+            let lastTap = 0;
+            if (footer) {
+                // Desktop Double Click
+                footer.addEventListener('dblclick', () => {
+                    openSyncModal();
+                });
+
+                // Mobile Double Tap detection
+                footer.addEventListener('touchstart', (e) => {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    if (tapLength < 300 && tapLength > 0) {
+                        e.preventDefault(); // Prevents browser zooming on tap
+                        openSyncModal();
+                    }
+                    lastTap = currentTime;
+                });
+            }
         }
 
         // Function to toggle a roommate's rent as paid/unpaid
@@ -1001,6 +1017,9 @@
             }
 
             generateTextSummary(currentMonth, baseRent, utilityBill, wifiBill, totalBill, rawSharePerPerson, spentPayments, roommateCalculatedDues, allPaid);
+            
+            // Auto-persist the calculated states to browser storage
+            persistToLocalStorage();
         }
 
         function calculateMealSplit() {
@@ -1081,6 +1100,9 @@
 
             // Re-render Meal Receipt Textbox Block
             generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance);
+
+            // Auto-persist the calculated states to browser storage
+            persistToLocalStorage();
         }
 
         function generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance) {
@@ -1215,6 +1237,7 @@
             });
 
             calculateRentSplit(true);
+            persistToLocalStorage(); // explicitly persist reset values
             showToastNotification("🔄 Rent Calculator reset to defaults!", "info");
         }
 
@@ -1235,6 +1258,7 @@
             });
 
             calculateMealSplit();
+            persistToLocalStorage(); // explicitly persist reset values
             showToastNotification("🔄 Meal calculations reset to defaults!", "info");
         }
 
@@ -1314,8 +1338,9 @@
         async function syncRentToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
-                showToastNotification("⚠️ আগে Settings-এ গিয়ে আপনার Apps Script URL সেভ করুন!", "warning");
-                toggleSettingsForm();
+                showToastNotification("⚠️ আগে আপনার Apps Script URL সেভ করুন!", "warning");
+                const urlInput = document.getElementById('sheets-web-url');
+                if (urlInput) urlInput.focus();
                 return;
             }
 
@@ -1378,8 +1403,9 @@
         async function syncMealsToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
-                showToastNotification("⚠️ আগে Settings-এ গিয়ে আপনার Apps Script URL সেভ করুন!", "warning");
-                toggleSettingsForm();
+                showToastNotification("⚠️ আগে আপনার Apps Script URL সেভ করুন!", "warning");
+                const urlInput = document.getElementById('sheets-web-url');
+                if (urlInput) urlInput.focus();
                 return;
             }
 
