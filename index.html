@@ -32,24 +32,41 @@
         .modal-content-active {
             transform: scale(1) !important;
         }
+        /* Custom scrollbar for summary boxes */
+        pre::-webkit-scrollbar {
+            width: 6px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 8px;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <header class="bg-gradient-to-r from-rose-600 via-purple-700 to-indigo-800 text-white shadow-md">
-        <div class="max-w-4xl mx-auto px-4 py-5 flex justify-between items-center">
+    <header class="bg-gradient-to-r from-rose-600 via-purple-700 to-indigo-800 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm shadow-inner">
                     <i class="fa-solid fa-bolt text-2xl text-amber-300 animate-pulse"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Present Trouble ⚡</h1>
-                    <p class="text-xs text-rose-100">মেস লাইফের ঝামেলাহীন ভাড়ার ও মিলের হিসাব-নিকাশ</p>
+                    <h1 class="text-xl md:text-2xl font-black tracking-wide flex items-center gap-1.5">
+                        Present Trouble ⚡
+                    </h1>
+                    <p class="text-xs text-rose-100 font-medium">মেস লাইফের ঝামেলাহীন ভাড়ার ও মিলের হিসাব-নিকাশ</p>
                 </div>
             </div>
-            <div class="bg-white/10 px-3 py-1.5 rounded-lg text-sm font-medium backdrop-blur-sm flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-400 animate-ping"></span>
-                ৪ ট্রাবলমেকার্স
+            
+            <div class="flex items-center gap-2">
+                <div class="bg-white/10 px-3 py-1.5 rounded-xl text-xs font-semibold backdrop-blur-sm flex items-center gap-2 border border-white/10">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>৪ ট্রাবলমেকার্স</span>
+                </div>
             </div>
         </div>
     </header>
@@ -58,15 +75,18 @@
         
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h2 class="text-lg font-bold text-slate-800 mb-1" id="banner-month-title">জুলাই ২০২৬ হিসাব (July 2026 Summary)</h2>
+                <h2 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2" id="banner-month-title">
+                    <i class="fa-solid fa-calendar-check text-indigo-600"></i>
+                    জুলাই ২০২৬ হিসাব (July 2026 Summary)
+                </h2>
                 <p class="text-sm text-slate-500">বেস ভাড়া ও ইউটিলিটি সহ মোট হিসাব নিচে দেওয়া হলো। সরাসরি মোট বিল এডিট করতে ডানপাশের বক্সে টাইপ করুন।</p>
             </div>
             <!-- Interactive Editable Total Rent Display Card -->
-            <div class="bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-xl px-4 py-2.5 text-right w-full md:w-auto flex flex-col items-end shadow-sm group hover:border-emerald-300 transition duration-150">
-                <span class="text-[10px] font-bold block uppercase tracking-wider text-emerald-600 mb-1">Total Rent Bill (এখানে এডিট করুন)</span>
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl px-4 py-2.5 text-right w-full md:w-auto flex flex-col items-end shadow-sm group hover:border-emerald-400 transition duration-150">
+                <span class="text-[10px] font-bold block uppercase tracking-wider text-emerald-600 mb-0.5">Total Rent Bill (এখানে এডিট করুন)</span>
                 <div class="flex items-center gap-1 justify-end w-full">
-                    <i class="fa-solid fa-pen text-xs text-emerald-400 group-hover:text-emerald-600 transition duration-150 mr-1"></i>
-                    <input type="number" id="quick-total-input" value="10306" class="bg-transparent text-2xl font-extrabold text-emerald-800 text-right focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-lg px-2 py-0.5 w-32 border border-emerald-100 hover:border-emerald-200 transition duration-150" placeholder="0">
+                    <i class="fa-solid fa-pen text-xs text-emerald-500 group-hover:text-emerald-700 transition duration-150 mr-1"></i>
+                    <input type="number" id="quick-total-input" value="10306" class="bg-white/80 text-2xl font-extrabold text-emerald-900 text-right focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-lg px-2 py-0.5 w-32 border border-emerald-200 hover:border-emerald-300 transition duration-150" placeholder="0">
                     <span class="text-2xl font-extrabold text-emerald-800">৳</span>
                 </div>
             </div>
@@ -98,7 +118,7 @@
                             <option value="November">November</option>
                             <option value="December">December</option>
                         </select>
-                        <p class="text-[11px] text-indigo-600 font-semibold mt-1.5"><i class="fa-solid fa-lightbulb"></i> June ও July এর মধ্যে পরিবর্তন করে আগের ও নতুন ডাটার তফাত দেখুন!</p>
+                        <p class="text-[11px] text-indigo-600 font-semibold mt-1.5"><i class="fa-solid fa-lightbulb"></i> মাস সিলেক্ট করলে স্বয়ংক্রিয়ভাবে ওই মাসের হিসাব ব্যাকআপ ও লোড হবে!</p>
                     </div>
 
                     <!-- Base Rent -->
@@ -181,7 +201,7 @@
                             <i class="fa-solid fa-users text-indigo-500"></i>
                             ভাড়া ও ইউটিলিটি শেয়ার (Roommates Share)
                         </h3>
-                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2 py-1 rounded">Equal Split (1/4)</span>
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-lg">Equal Split (1/4)</span>
                     </div>
 
                     <!-- Roommate list container -->
@@ -330,11 +350,11 @@
                             <i class="fa-solid fa-receipt text-amber-400"></i>
                             ভাড়া সামারি (Shareable Rent Summary)
                         </span>
-                        <span class="text-[11px] bg-indigo-800/80 text-indigo-200 px-2 py-0.5 rounded uppercase font-bold tracking-wider" id="summary-month-badge">July 2026</span>
+                        <span class="text-[11px] bg-indigo-800/80 text-indigo-200 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider" id="summary-month-badge">July 2026</span>
                     </h3>
 
                     <!-- Dynamic text display container -->
-                    <pre id="summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-indigo-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-indigo-900/30"></pre>
+                    <pre id="summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-indigo-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-indigo-900/30 select-all"></pre>
 
                     <!-- Interaction Actions -->
                     <div class="mt-4 flex flex-col sm:flex-row gap-3">
@@ -362,7 +382,7 @@
                         <p class="text-xs text-slate-400">মেসের বাজার খরচ এবং সবার মোট মিলের নির্ভুল হিসাব</p>
                     </div>
                 </div>
-                <div class="bg-rose-50 border border-rose-100 text-rose-800 px-4 py-2 rounded-xl flex items-center gap-2">
+                <div class="bg-rose-50 border border-rose-100 text-rose-800 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
                     <span class="text-xs font-semibold">আজকের মিল রেট:</span>
                     <span class="font-black text-rose-600 text-lg" id="meal-rate-badge">৳ 0.00</span>
                 </div>
@@ -373,7 +393,9 @@
                 <!-- Meal Controls Panel -->
                 <div class="lg:col-span-4 space-y-5">
                     <div class="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl space-y-4">
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">মিল প্যারামিটারস (Parameters)</h4>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                            <span>মিল প্যারামিটারস (Parameters)</span>
+                        </h4>
                         
                         <!-- Total Bazaar Expense -->
                         <div>
@@ -386,7 +408,12 @@
 
                         <!-- Total Meal Count -->
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1.5">মোট মিল সংখ্যা (Total Meals)</label>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="text-xs font-semibold text-slate-600">মোট মিল সংখ্যা (Total Meals)</label>
+                                <button type="button" onclick="autoSumMemberMeals()" class="text-[10px] text-rose-600 hover:text-rose-800 font-bold underline flex items-center gap-1">
+                                    <i class="fa-solid fa-calculator"></i> Auto-Sum All
+                                </button>
+                            </div>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-xs"><i class="fa-solid fa-utensils text-xs"></i></div>
                                 <input type="number" id="meal-total-count" value="120" class="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-4 py-2 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="0">
@@ -418,7 +445,7 @@
 
                             <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm" id="cash-balance-card">
                                 <div class="flex flex-col text-left">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase" id="cash-balance-title">অবशिष्ट ক্যাশ / ঘাটতি</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase" id="cash-balance-title">অবশিষ্ট ক্যাশ / ঘাটতি</span>
                                     <span class="text-xs font-bold text-slate-700">Cash Balance</span>
                                 </div>
                                 <span class="text-sm font-black text-emerald-600" id="total-cash-balance-badge">৳ 0.00</span>
@@ -433,7 +460,6 @@
                     </div>
                 </div>
 
-                <!-- Roommate Meals Details Panel -->
                 <div class="lg:col-span-8 space-y-4">
                     <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">মেম্বারদের জমা ও মিল এন্ট্রি (Deposits & Meals)</h4>
                     
@@ -537,11 +563,11 @@
                         <i class="fa-solid fa-utensils text-rose-400"></i>
                         মিলের সামারি (Shareable Meal Summary)
                     </span>
-                    <span class="text-[11px] bg-rose-800/80 text-rose-200 px-2 py-0.5 rounded uppercase font-bold tracking-wider" id="meal-summary-month-badge">July 2026</span>
+                    <span class="text-[11px] bg-rose-800/80 text-rose-200 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider" id="meal-summary-month-badge">July 2026</span>
                 </h3>
 
                 <!-- Dynamic text display container -->
-                <pre id="meal-summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-rose-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-rose-900/30"></pre>
+                <pre id="meal-summary-text-box" class="text-xs font-mono bg-slate-950/70 p-4 rounded-xl text-rose-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto border border-rose-900/30 select-all"></pre>
 
                 <!-- Actions -->
                 <div class="mt-4 flex flex-col sm:flex-row gap-3">
@@ -560,7 +586,7 @@
 
     <!-- Floating Google Sheet Connection Modal (Hidden by Default) -->
     <div id="sync-modal-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
-        <div id="sync-modal-content" class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-slate-100 transform scale-90 transition-all duration-300 relative">
+        <div id="sync-modal-content" class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-slate-100 transform scale-90 transition-all duration-300 relative max-h-[90vh] overflow-y-auto">
             
             <!-- Close Button -->
             <button onclick="closeSyncModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
@@ -569,12 +595,12 @@
 
             <!-- Title Header inside Modal -->
             <div class="flex items-center space-x-3 mb-4">
-                <div class="bg-indigo-600 text-white p-2.5 rounded-2xl">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-2xl shadow-md">
                     <i class="fa-solid fa-file-excel text-2xl"></i>
                 </div>
                 <div>
                     <h3 class="text-base font-bold text-slate-800">গুগল শিট সিনক্রোনাইজেশন হাব</h3>
-                    <p class="text-xs text-slate-500">Google Sheet Connection Hub</p>
+                    <p class="text-xs text-slate-500">Google Sheet Cloud Connection Hub</p>
                 </div>
             </div>
 
@@ -583,18 +609,18 @@
                 <label class="block text-xs font-bold text-slate-600 uppercase">Google Web App Script URL</label>
                 <div class="flex flex-col gap-2">
                     <input type="text" id="sheets-web-url" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="https://script.google.com/macros/s/.../exec">
-                    <button onclick="saveWebUrl()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition duration-150 flex items-center justify-center gap-2">
+                    <button onclick="saveWebUrl()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition duration-150 flex items-center justify-center gap-2 shadow-sm">
                         <i class="fa-solid fa-floppy-disk"></i> Save URL (সেভ করুন)
                     </button>
                 </div>
-                <p class="text-[10px] text-slate-400 leading-normal"><i class="fa-solid fa-lock"></i> এই URL টি আপনার ব্রাউজারের লোকাল স্টোরেজে (localStorage) সুরক্ষিত থাকবে, GitHub-এ প্রকাশ পাবে না।</p>
+                <p class="text-[10px] text-slate-400 leading-normal"><i class="fa-solid fa-lock"></i> এই URL টি আপনার ব্রাউজারের লোকাল স্টোরেজে (localStorage) সুরক্ষিত থাকবে, অন্য কারও সাথে শেয়ার হবে না।</p>
             </div>
 
             <!-- Action Controls inside Modal -->
             <div class="space-y-3">
                 <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider px-1">লাইভ সিঙ্ক ও মেম্বার শেয়ারিং</span>
                 
-                <!-- NEW: Publish State to Server for live roommate sync -->
+                <!-- Publish State to Server for live roommate sync -->
                 <button onclick="publishStateToSheet()" id="publish-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-600/10 mb-2">
                     <i class="fa-solid fa-share-nodes text-sm"></i>
                     <span>Publish to Roommates (সবার সাথে লাইভ শেয়ার করুন)</span>
@@ -612,6 +638,18 @@
                     </button>
                 </div>
             </div>
+
+            <div class="mt-4 border-t pt-3">
+                <details class="text-[11px] text-slate-500">
+                    <summary class="cursor-pointer font-bold text-indigo-600 hover:underline">💡 গুগল অ্যাপস স্ক্রিপ্ট (Google Apps Script) কিভাবে সেটআপ করবেন?</summary>
+                    <div class="mt-2 bg-slate-900 text-slate-200 p-3 rounded-xl font-mono text-[10px] space-y-1">
+                        <p class="text-amber-300">// Extensions > Apps Script এ গিয়ে এই কোডটি পেস্ট করুন:</p>
+                        <p>function doGet(e) { return ContentService.createTextOutput(JSON.stringify({status:"success", dataStore: JSON.parse(PropertiesService.getScriptProperties().getProperty("ds") || "{}")})).setMimeType(ContentService.MimeType.JSON); }</p>
+                        <p>function doPost(e) { var p = JSON.parse(e.postData.contents); if(p.type === "save_state"){ PropertiesService.getScriptProperties().setProperty("ds", JSON.stringify(p.dataStore)); } return ContentService.createTextOutput("OK"); }</p>
+                        <p class="text-emerald-400 font-sans font-bold mt-1">Deploy > New deployment > Web app > Anyone select করে Deploy চাপুন!</p>
+                    </div>
+                </details>
+            </div>
         </div>
     </div>
 
@@ -621,10 +659,14 @@
     </div>
 
     <!-- Interactive Footer with secret Double Tap Hook -->
-    <footer id="app-footer" class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400 cursor-pointer select-none group transition duration-150 hover:bg-slate-50/50">
+    <footer id="app-footer" class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400 cursor-pointer select-none group transition duration-150 hover:bg-slate-50/50" title="Double click for Cloud Sync">
         <div class="max-w-4xl mx-auto px-4 space-y-2">
             <p class="font-medium text-slate-500 transition duration-150 group-hover:text-indigo-600">Present Trouble Rent & Meal Calculator • Made with <i class="fa-solid fa-bolt text-amber-500"></i></p>
             <p>Designed for Troublesome Roommates: JONY, RIFAT, MURAD & RAYHAN</p>
+            <p class="text-[10px] text-slate-400 opacity-70 group-hover:opacity-100 transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-cloud-arrow-up text-indigo-500"></i>
+                <span>ক্লাউড সিঙ্ক করতে ফুটারে ডাবল ক্লিক করুন (Double-click for Cloud Sync)</span>
+            </p>
         </div>
     </footer>
 
@@ -640,7 +682,7 @@
             RAYHAN: false
         };
 
-        // Multi-Month Data Repository (জুন মাসের ডাটা ফিক্সড করে দেওয়া হয়েছে)
+        // Multi-Month Data Repository (জুন ও জুলাইয়ের প্রাথমিক ডাটা)
         const dataStore = {
             June: {
                 rent: {
@@ -653,8 +695,8 @@
                 meals: {
                     totalCost: 5220,
                     totalCount: 148,
-                    deposits: { JONY: 1500, RIFAT: 1500, MURAD: 1000, RAYHAN: 1240 }, // মোট ডিপোজিট ৫২৪ো টাকা
-                    counts: { JONY: 46, RIFAT: 46, MURAD: 20, RAYHAN: 36 } // মোট মিল ১৪৮টি
+                    deposits: { JONY: 1500, RIFAT: 1500, MURAD: 1000, RAYHAN: 1240 },
+                    counts: { JONY: 46, RIFAT: 46, MURAD: 20, RAYHAN: 36 }
                 }
             },
             July: {
@@ -719,14 +761,13 @@
             if (savedDataStore) {
                 try {
                     const parsedData = JSON.parse(savedDataStore);
-                    // Merge saved database with memory database
                     Object.assign(dataStore, parsedData);
                 } catch (e) {
                     console.error("Error loading saved dataStore:", e);
                 }
             }
 
-            // NEW: Load the live, shared database from Google Sheets (if URL exists)
+            // Load the live database from Google Sheets (if URL exists)
             loadLiveStateFromServer();
 
             loadMonthState(currentActiveMonth);
@@ -764,16 +805,16 @@
                 dataStore[month] = {
                     rent: {
                         base: 7500,
-                        utility: 0,
+                        utility: 2000,
                         wifi: false,
                         spent: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
                         paid: { JONY: false, RIFAT: false, MURAD: false, RAYHAN: false }
                     },
                     meals: {
-                        totalCost: 0,
-                        totalCount: 0,
-                        deposits: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 },
-                        counts: { JONY: 0, RIFAT: 0, MURAD: 0, RAYHAN: 0 }
+                        totalCost: 6000,
+                        totalCount: 120,
+                        deposits: { JONY: 1500, RIFAT: 1500, MURAD: 1500, RAYHAN: 1500 },
+                        counts: { JONY: 30, RIFAT: 30, MURAD: 30, RAYHAN: 30 }
                     }
                 };
             }
@@ -782,7 +823,9 @@
 
         // Save current screen state to memory
         function saveCurrentMonthState(month) {
-            if (!dataStore[month]) return;
+            if (!dataStore[month]) {
+                getMonthData(month);
+            }
             dataStore[month].rent.base = parseFloat(baseRentInput.value) || 0;
             dataStore[month].rent.utility = parseFloat(utilityBillInput.value) || 0;
             dataStore[month].rent.wifi = addWifiCheckbox.checked;
@@ -803,20 +846,21 @@
         function loadMonthState(month) {
             const data = getMonthData(month);
             
+            billMonthSelect.value = month;
             baseRentInput.value = data.rent.base;
             utilityBillInput.value = data.rent.utility;
             addWifiCheckbox.checked = data.rent.wifi;
             
             roommates.forEach(name => {
-                document.getElementById(`spent-${name}`).value = data.rent.spent[name];
-                rentPaymentStatuses[name] = data.rent.paid[name];
+                document.getElementById(`spent-${name}`).value = data.rent.spent[name] || 0;
+                rentPaymentStatuses[name] = !!data.rent.paid[name];
                 
-                document.getElementById(`meal-deposit-${name}`).value = data.meals.deposits[name];
-                document.getElementById(`meals-${name}`).value = data.meals.counts[name];
+                document.getElementById(`meal-deposit-${name}`).value = data.meals.deposits[name] || 0;
+                document.getElementById(`meals-${name}`).value = data.meals.counts[name] || 0;
             });
 
-            mealTotalCostInput.value = data.meals.totalCost;
-            mealTotalCountInput.value = data.meals.totalCount;
+            mealTotalCostInput.value = data.meals.totalCost || 0;
+            mealTotalCountInput.value = data.meals.totalCount || 0;
 
             summaryMonthBadge.textContent = `${month} 2026`;
             mealSummaryMonthBadge.textContent = `${month} 2026`;
@@ -825,7 +869,6 @@
             calculateMealSplit();
         }
 
-        // Event listener hooks mapping
         function setupEventListeners() {
             // Rent Update Triggers
             baseRentInput.addEventListener('input', () => calculateRentSplit(true));
@@ -835,7 +878,7 @@
             billMonthSelect.addEventListener('change', () => {
                 // Save old first
                 saveCurrentMonthState(currentActiveMonth);
-                persistToLocalStorage(); // Persist right before switching months
+                persistToLocalStorage();
                 
                 // Set new
                 currentActiveMonth = billMonthSelect.value;
@@ -866,21 +909,16 @@
                 if (mealInput) mealInput.addEventListener('input', calculateMealSplit);
             });
 
-            // Double Click & Tap Event Listeners for secret sync panel triggering on Footer
+            // Double Click & Tap Event Listeners for sync panel
             const footer = document.getElementById('app-footer');
             let lastTap = 0;
             if (footer) {
-                // Desktop Double Click
-                footer.addEventListener('dblclick', () => {
-                    openSyncModal();
-                });
-
-                // Mobile Double Tap detection
+                footer.addEventListener('dblclick', openSyncModal);
                 footer.addEventListener('touchstart', (e) => {
                     const currentTime = new Date().getTime();
                     const tapLength = currentTime - lastTap;
                     if (tapLength < 300 && tapLength > 0) {
-                        e.preventDefault(); // Prevents browser zooming on tap
+                        e.preventDefault();
                         openSyncModal();
                     }
                     lastTap = currentTime;
@@ -888,11 +926,9 @@
             }
         }
 
-        // Function to toggle a roommate's rent as paid/unpaid
         function toggleRentPaid(name) {
             rentPaymentStatuses[name] = !rentPaymentStatuses[name];
             
-            // Calculate current roommate's due to show in message
             const baseRent = parseFloat(baseRentInput.value) || 0;
             const wifiBill = addWifiCheckbox.checked ? 525 : 0;
             const totalRent = parseFloat(quickTotalInput.value) || (baseRent + (parseFloat(utilityBillInput.value) || 0) + wifiBill);
@@ -927,7 +963,7 @@
                 utilityBillInput.value = utilityBill >= 0 ? utilityBill : 0;
             }
 
-            bannerMonthTitle.textContent = `${currentMonth} ২০২৬ হিসাব (${currentMonth} 2026 Summary)`;
+            bannerMonthTitle.innerHTML = `<i class="fa-solid fa-calendar-check text-indigo-600"></i> ${currentMonth} ২০২৬ হিসাব (${currentMonth} 2026 Summary)`;
             calcBaseDisplay.textContent = `৳ ${baseRent.toLocaleString()}`;
             calcUtilityDisplay.textContent = `৳ ${utilityBill.toLocaleString()}`;
             
@@ -1028,8 +1064,6 @@
             }
 
             generateTextSummary(currentMonth, baseRent, utilityBill, wifiBill, totalBill, rawSharePerPerson, spentPayments, roommateCalculatedDues, allPaid);
-            
-            // Auto-persist the calculated states to browser storage
             persistToLocalStorage();
         }
 
@@ -1051,9 +1085,7 @@
                 
                 totalDepositCollected += deposit;
                 
-                // Actual cost for this roommate
                 const cost = mealCount * mealRate;
-                // Balance = deposit - cost
                 const balance = deposit - cost;
 
                 mealData[name] = {
@@ -1063,7 +1095,6 @@
                     balance: balance
                 };
 
-                // Update UI for each roommate
                 const costDisplay = document.getElementById(`meal-cost-${name}`);
                 const statusDisplay = document.getElementById(`meal-status-${name}`);
 
@@ -1085,35 +1116,39 @@
                 }
             });
 
-            // Update Total Collected Deposit Indicator
             totalCollectedDepositBadge.textContent = `৳ ${totalDepositCollected.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-            // Calculate remaining Cash Balance (Total Deposits - Total Cost)
             const cashBalance = totalDepositCollected - totalCost;
             totalCashBalanceBadge.textContent = `৳ ${Math.abs(cashBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             
             if (cashBalance > 0) {
-                // Surplus cash with Manager
                 cashBalanceCard.className = "flex justify-between items-center bg-emerald-50/50 p-3 rounded-xl border border-emerald-200 shadow-sm";
-                cashBalanceTitle.innerHTML = "অবशिष्ट ক্যাশ (Surplus) <span class='text-emerald-600 font-bold'>🟢</span>";
+                cashBalanceTitle.innerHTML = "অবশিষ্ট ক্যাশ (Surplus) <span class='text-emerald-600 font-bold'>🟢</span>";
                 totalCashBalanceBadge.className = "text-sm font-black text-emerald-600";
             } else if (cashBalance < 0) {
-                // Cash shortage (Manager is short on funds)
                 cashBalanceCard.className = "flex justify-between items-center bg-rose-50/50 p-3 rounded-xl border border-rose-200 shadow-sm";
                 cashBalanceTitle.innerHTML = "ঘাটতি ক্যাশ (Shortage) <span class='text-rose-600 font-bold'>🔴</span>";
                 totalCashBalanceBadge.className = "text-sm font-black text-rose-600";
             } else {
-                // Perfect zero balance
                 cashBalanceCard.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-sm";
                 cashBalanceTitle.innerHTML = "ব্যালেন্স ক্লিয়ার (Zero Balance) ⚪";
                 totalCashBalanceBadge.className = "text-sm font-black text-slate-600";
             }
 
-            // Re-render Meal Receipt Textbox Block
             generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance);
-
-            // Auto-persist the calculated states to browser storage
             persistToLocalStorage();
+        }
+
+        // Auto-sum all member meals into Total Meals input
+        function autoSumMemberMeals() {
+            let sum = 0;
+            roommates.forEach(name => {
+                const val = parseFloat(document.getElementById(`meals-${name}`).value) || 0;
+                sum += val;
+            });
+            mealTotalCountInput.value = sum;
+            calculateMealSplit();
+            showToastNotification(`🔢 মেম্বারদের মোট মিলের যোগফল: ${sum} টি সেট করা হয়েছে!`, "info");
         }
 
         function generateMealTextSummary(currentMonth, totalCost, totalMeals, mealRate, mealData, totalDepositCollected, cashBalance) {
@@ -1209,7 +1244,7 @@
             summaryTextBox.textContent = summary;
         }
 
-        // Copy text to clipboard logic targeting specified textbox ID
+        // Reliable clipboard text copy logic
         function copyToClipboard(elementId) {
             const target = document.getElementById(elementId);
             if (!target) return;
@@ -1218,6 +1253,7 @@
             const tempTextArea = document.createElement("textarea");
             tempTextArea.value = textToCopy;
             tempTextArea.style.position = "fixed";
+            tempTextArea.style.left = "-9999px";
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
             
@@ -1235,7 +1271,6 @@
             document.body.removeChild(tempTextArea);
         }
 
-        // Reset rent calculator
         function resetCalculator() {
             baseRentInput.value = 7500;
             utilityBillInput.value = 2806;
@@ -1248,11 +1283,10 @@
             });
 
             calculateRentSplit(true);
-            persistToLocalStorage(); // explicitly persist reset values
+            persistToLocalStorage();
             showToastNotification("🔄 Rent Calculator reset to defaults!", "info");
         }
 
-        // Reset meal calculator
         function resetMealCalculator() {
             mealTotalCostInput.value = 6500;
             mealTotalCountInput.value = 120;
@@ -1269,11 +1303,10 @@
             });
 
             calculateMealSplit();
-            persistToLocalStorage(); // explicitly persist reset values
+            persistToLocalStorage();
             showToastNotification("🔄 Meal calculations reset to defaults!", "info");
         }
 
-        // Set same meal count to all roommates at once and auto update total count
         function setSameMeals() {
             const quickInput = document.getElementById('quick-same-meals');
             const count = parseFloat(quickInput.value);
@@ -1283,26 +1316,16 @@
                 return;
             }
 
-            // Apply meal count to all roommate meal inputs
             roommates.forEach(name => {
                 const input = document.getElementById(`meals-${name}`);
-                if (input) {
-                    input.value = count;
-                }
+                if (input) input.value = count;
             });
 
-            // Auto calculate total meals count based on equal input (count * 4)
-            const totalCountInput = document.getElementById('meal-total-count');
-            if (totalCountInput) {
-                totalCountInput.value = count * roommates.length;
-            }
-
-            // Recalculate everything
+            mealTotalCountInput.value = count * roommates.length;
             calculateMealSplit();
             showToastNotification(`⚡ সবার মিল সংখ্যা ${count} এবং মোট মিল ${count * roommates.length} করা হয়েছে!`, "success");
         }
 
-        // Custom notifications toast loader
         function showToastNotification(message, type) {
             toastMessage.textContent = message;
             toastMessage.classList.remove('hidden', 'bg-emerald-500', 'bg-rose-500', 'bg-indigo-600', 'bg-amber-500');
@@ -1324,9 +1347,6 @@
             }, 4000);
         }
 
-        // --- GOOGLE SHEETS INTEGRATION CODE BLOCK ---
-
-        // Save sheet URL to local storage
         function saveWebUrl() {
             const url = document.getElementById('sheets-web-url').value.trim();
             if (!url) {
@@ -1339,8 +1359,6 @@
             }
             localStorage.setItem("present_trouble_web_url", url);
             showToastNotification("💾 Google Web App URL ব্রাউজারে সুরক্ষিতভাবে সেভ করা হয়েছে!", "success");
-            
-            // Auto reload state once new URL is saved
             loadLiveStateFromServer();
         }
 
@@ -1348,7 +1366,6 @@
             return localStorage.getItem("present_trouble_web_url");
         }
 
-        // NEW: Publish the entire dataStore database live to Google Sheets (for roommates)
         async function publishStateToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
@@ -1361,7 +1378,6 @@
             publishBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Broadcasting Live...`;
             publishBtn.disabled = true;
 
-            // Make sure latest input values are stored in dataStore before publishing
             saveCurrentMonthState(currentActiveMonth);
 
             const payload = {
@@ -1370,44 +1386,28 @@
             };
 
             try {
-                // We use standard fetch but without no-cors so we can read the response status
-                const response = await fetch(url, {
+                await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 
-                showToastNotification("🚀 মেসের লাইভ ডাটা ক্লাউডে পাবলিশ করা হয়েছে! অন্য মেম্বাররা এখন দেখতে পাবে।", "success");
+                showToastNotification("🚀 মেসের লাইভ ডাটা ক্লাউডে পাবলিশ করা হয়েছে!", "success");
                 closeSyncModal();
             } catch (error) {
                 console.error("Publish Error:", error);
-                // Fallback attempt (just in case CORS is still strict, sometimes no-cors works silently)
-                try {
-                    await fetch(url, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'text/plain;charset=utf-8'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    showToastNotification("🚀 মেসের লাইভ ডাটা ক্লাউডে পাবলিশ করা হয়েছে! (Broadcasted successfully)", "success");
-                    closeSyncModal();
-                } catch (e) {
-                    showToastNotification("❌ সার্ভারে ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট চেক করুন!", "error");
-                }
+                showToastNotification("❌ সার্ভারে ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট চেক করুন!", "error");
             } finally {
                 publishBtn.innerHTML = originalText;
                 publishBtn.disabled = false;
             }
         }
 
-        // NEW: Automatically pull the live roommate database from Google Sheets on page load
         async function loadLiveStateFromServer() {
             const url = getSavedWebUrl();
-            if (!url) return; // URL না থাকলে লোড করার দরকার নেই
+            if (!url) return;
 
             showToastNotification("🔄 মেসের লাইভ ডাটা ক্লাউড থেকে ডাউনলোড করা হচ্ছে...", "info");
 
@@ -1417,29 +1417,20 @@
                 
                 const result = await response.json();
                 if (result && result.status === "success" && result.dataStore && Object.keys(result.dataStore).length > 0) {
-                    // Overwrite default/local datastore with live database!
                     Object.assign(dataStore, result.dataStore);
-                    
-                    // Save to browser cache
                     localStorage.setItem("present_trouble_datastore", JSON.stringify(dataStore));
-                    
-                    // Reload display
                     loadMonthState(currentActiveMonth);
                     showToastNotification("🟢 গুগল শিট থেকে লাইভ ড্যাশবোর্ড সফলভাবে লোড হয়েছে!", "success");
                 }
             } catch (error) {
-                console.warn("Unable to fetch live database, using offline browser cache instead.", error);
-                showToastNotification("⚠️ লাইভ ডাটা লোড করা যায়নি (ব্রাউজার ক্যাশ লোড করা হয়েছে)।", "warning");
+                console.warn("Unable to fetch live database, using browser cache.", error);
             }
         }
 
-        // Sync Rent & Bills function
         async function syncRentToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
                 showToastNotification("⚠️ আগে আপনার Apps Script URL সেভ করুন!", "warning");
-                const urlInput = document.getElementById('sheets-web-url');
-                if (urlInput) urlInput.focus();
                 return;
             }
 
@@ -1455,7 +1446,6 @@
             const currentMonth = billMonthSelect.value;
             const rawSharePerPerson = totalBill / roommates.length;
 
-            // Prepare Payload
             const roommateData = {};
             roommates.forEach(name => {
                 const spent = parseFloat(document.getElementById(`spent-${name}`).value) || 0;
@@ -1477,34 +1467,28 @@
             };
 
             try {
-                const response = await fetch(url, {
+                await fetch(url, {
                     method: 'POST',
-                    mode: 'no-cors', // Apps Script redirect CORS ইস্যু এড়াতে এটি সবচেয়ে ভালো পদ্ধতি
+                    mode: 'no-cors',
                     cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8' // CORS প্রী-ফ্লাইট ঠেকাতে text/plain ব্যবহার করা হয়েছে
-                    },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
 
-                // no-cors মোডে সরাসরি রেসপন্স রিড করা যায় না, কিন্তু ডেটা সার্ভারে চলে যায়।
-                showToastNotification("🎉 ভাড়ার ডেটা গুগল শিটে পাঠানো হয়েছে! (Check your sheet)", "success");
+                showToastNotification("🎉 ভাড়ার ডেটা গুগল শিটে পাঠানো হয়েছে!", "success");
             } catch (error) {
                 console.error("Sync Error:", error);
-                showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা URL চেক করুন!", "error");
+                showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। URL চেক করুন!", "error");
             } finally {
                 syncBtn.innerHTML = originalText;
                 syncBtn.disabled = false;
             }
         }
 
-        // Sync Meals & Deposits function
         async function syncMealsToSheet() {
             const url = getSavedWebUrl();
             if (!url) {
                 showToastNotification("⚠️ আগে আপনার Apps Script URL সেভ করুন!", "warning");
-                const urlInput = document.getElementById('sheets-web-url');
-                if (urlInput) urlInput.focus();
                 return;
             }
 
@@ -1518,7 +1502,6 @@
             const mealRate = totalMeals > 0 ? (totalCost / totalMeals) : 0;
             const currentMonth = billMonthSelect.value;
 
-            // Prepare Roommate Meal Payload
             const roommateData = {};
             let totalDepositCollected = 0;
 
@@ -1561,16 +1544,14 @@
                     method: 'POST',
                     mode: 'no-cors',
                     cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8' // CORS প্রী-ফ্লাইট ঠেকাতে text/plain ব্যবহার করা হয়েছে
-                    },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
 
-                showToastNotification("🎉 মিলের ডেটা গুগল শিটে পাঠানো হয়েছে! (Check your sheet)", "success");
+                showToastNotification("🎉 মিলের ডেটা গুগল শিটে পাঠানো হয়েছে!", "success");
             } catch (error) {
                 console.error("Sync Error:", error);
-                showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা URL চেক করুন!", "error");
+                showToastNotification("❌ ডেটা পাঠাতে সমস্যা হয়েছে। URL চেক করুন!", "error");
             } finally {
                 syncBtn.innerHTML = originalText;
                 syncBtn.disabled = false;
